@@ -1,0 +1,184 @@
+<!--DOCTYPE html-->
+{% block styles %}
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-image: url("{{ url_for('static', filename='recordplayer.png') }}");
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+    .header-section{
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        position: absolute;
+        top: 0;
+        margin-bottom: 0vh;
+    }
+    .upload-section{
+        display: flex;
+        flex-direction: row; /* Change from column to row */
+        position: absolute;
+        top: 15vh;
+        margin-top: 0vh;
+        height: 10vh; /* Adjust as necessary */
+        width: 33vw; /* Adjust as necessary */
+        justify-content: center;
+        align-items: center;
+    }
+    #upload-form {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .filename-display {
+        max-width: 200px; /* adjust as needed */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .custom-file-upload {
+        display: flex; /* Added this to arrange the elements in a row */
+        align-items: center; /* Added this to vertically align the elements */
+        justify-content: space-between; /* Added this to distribute space evenly between the elements */
+        width: 100%;
+        //margin-right: 10vw;
+    }
+    .image-section {
+        padding: 20px;
+        background-color: rgba(248, 248, 248, 0);
+        margin-top: 8vh;
+        margin-bottom: 0px;
+        border-radius: 5px;
+        text-align: center;
+        height: 40vh; /* Adjust as necessary */
+        width: 40vw; /* Adjust as necessary */
+        padding: 0px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    
+    .image-section img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain; /* This will make the image keep its aspect ratio */
+        margin: auto; /* added - this will center the image in the case it does not occupy the whole container's width or height */
+        display: block; /* added - makes the img a block level element */
+    }
+
+    .audio-section {
+        display: flex;
+        flex-direction: row; /* This will arrange the elements horizontally */
+        justify-content: space-around; /* This will evenly distribute the elements horizontally */
+        align-items: center; /* This will vertically align the elements */
+        padding: 0px;
+        background-color: rgba(248, 248, 248, 0);
+        border-radius: 5px;
+        flex-wrap: wrap; /* This will allow the items to wrap onto multiple lines if there isn't enough room on one line */
+    }
+
+    .audio-section h2,
+    .audio-section audio,
+    .audio-section p {
+        margin: 10px; /* Adjust as necessary */
+    }
+
+    h2 {
+        margin-top: 0;
+    }
+    .overlay-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+    
+    .loader {
+        border: 16px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 16px solid #3498db;
+        width: 120px;
+        height: 120px;
+        -webkit-animation: spin 2s linear infinite; /* Safari */
+        animation: spin 2s linear infinite;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: none; /* Start hidden */
+    }
+    @keyframes rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    #upload-button {
+        background: none; /* Ensures there's no background */
+        border: none; /* Removes the default button border */
+        padding: 0; /* Removes the default button padding */
+        cursor: pointer; /* Changes the cursor to a hand when hovering over the button */
+    }
+    
+    #upload-button img {
+        display: block;
+        width: 100%; /* Makes the image fill the button */
+        height: auto; /* Maintains the image aspect ratio */
+    }
+    #upload-button img {
+        content: url("{{ url_for('static', filename='upload.png') }}");
+    }
+    
+    #upload-button:hover img {
+        content: url("{{ url_for('static', filename='uploadhover.png') }}");
+    }
+    
+    #upload-button:active img {
+        content: url("{{ url_for('static', filename='uploadpress.png') }}");
+    }
+    #choose-file-button {
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+    }
+    
+    #choose-file-button img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+    
+    #choose-file-button:hover img {
+        content: url("{{ url_for('static', filename='choosefilehover.png') }}");
+    }
+    
+    #choose-file-button:active img {
+        content: url("{{ url_for('static', filename='choosefilepress.png') }}");
+    }
+    #overlay-image {
+        position: absolute;
+        top: 40vh; /* adjust as necessary */
+        right: 39vh; /* adjust as necessary */
+        width: 15%;
+        height: 20%;
+        object-fit: cover;
+        z-index: 1; /* This makes sure the overlay image is on top. */
+        opacity: 0.5; /* Makes the image semi-transparent */
+    }
+</style>
+{% endblock %}

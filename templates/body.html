@@ -1,0 +1,45 @@
+{% block body %}
+<!-- Header Section -->
+<div class="header-section">
+    <h1>ASTRAL</h1>
+    <h2>Audio Spectral Transformation with Radial Analysis Layer</h2>
+</div>
+<!-- Upload Section -->
+<div class="upload-section">
+    <form id="upload-form" action="/upload" method="post" enctype="multipart/form-data">
+        <div class="custom-file-upload">
+            <input type="file" id="file" name="file" accept=".png,.jpg,.jpeg,.mp3,.wav" style="display: none;">
+            <button id="choose-file-button">
+                <img src="{{ url_for('static', filename='choosefile.png') }}" alt="Choose File">
+            </button>
+            <span id="file-name" class="filename-display">No file chosen</span> <!-- Display the name of the selected file -->
+            <button id="upload-button" type="submit">
+                <img src="{{ url_for('static', filename='upload.png') }}" alt="Upload">
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Image Section -->
+<div class="image-section">
+    <div id="spinner" class="loader"></div>
+    <img id="uploaded-image" src="{{ url_for('static', filename='placeholderimg.png') }}" alt="Uploaded image will appear here">
+    <img id="overlay-image" src="{{ url_for('static', filename='laser.png') }}" alt="Overlay image" style="display: none;">
+</div>
+
+<!-- Audio Section -->
+<div class="audio-section">
+    <!--<h2>Audio</h2>-->
+    <div class="song-info">
+        <p id="song-title">Song Title: N/A</p>
+        <p id="song-artist">Song Artist: N/A</p>
+    </div>
+    <div class="audiomedia">
+        <audio id="uploaded-audio" controls>
+            <source src="placeholder.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+    
+</div>
+{% endblock %}

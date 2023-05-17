@@ -1,0 +1,95 @@
+<!--DOCTYPE html-->
+{% block scripts %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#choose-file-button').click(function(e) {
+            e.preventDefault();
+            $('#file').click();
+        });
+        
+        $('#file').change(function() {
+            // Display the name of the selected file
+            $('#file-name').text(this.files[0].name);
+        });
+        document.getElementById('uploaded-audio').addEventListener('play', function() {
+            var duration = this.duration; // Get the duration of the audio file
+            var rotatingImage = document.getElementById('uploaded-image');
+            rotatingImage.style.animation = `rotate ${duration}s linear infinite`;
+            rotatingImage.style.animationPlayState = 'running';
+            document.getElementById('overlay-image').style.display = 'block'; // Show the overlay image
+        });
+                    
+        document.getElementById('uploaded-audio').addEventListener('pause', function() {
+            var rotatingImage = document.getElementById('uploaded-image');
+            rotatingImage.style.animationPlayState = 'paused';
+            document.getElementById('overlay-image').style.display = 'none'; // Hide the overlay image
+        });
+        
+        $('#spinner').css('display', 'none');
+        $('#upload-form').on('submit', function(e) {
+            e.preventDefault();
+            
+            var formData = new FormData(this);
+    
+            $.ajax({
+                url: '/upload',
+                type: 'POST',
+                data: formData,
+                success: function (data) {
+                    $('#spinner').css('display', 'block');
+                    // handle success
+                    if (data.image_url) {
+                        $("#uploaded-image").attr("src", data.image_url);
+                    } else if (data.song_url) {
+                        var audioElement = $("#uploaded-audio");
+                        audioElement.children().first().attr("src", data.song_url);
+                        audioElement[0].load();
+                        $("#song-title").text("Song Title: " + data.song_name);
+                        $("#song-artist").text("Song Artist: " + data.artist);
+                    }
+                    // Start processing
+                    $.ajax({
+                        url: '/process',
+                        type: 'POST',
+                        data: {filename: data.filename},
+                        success: function (data) {
+                            $('#spinner').css('display', 'none');
+                            if (data.song_name && data.artist) {
+                                $("#song-title").text("Song Title: " + data.song_name);
+                                $("#song-artist").text("Song Artist: " + data.artist);
+                            }
+                            if (data.image_url) {
+                                $("#uploaded-image").attr("src", data.image_url);
+                            } else if (data.song_url) {
+                                var audioElement = $("#uploaded-audio");
+                                audioElement.children().first().attr("src", data.song_url);
+                                audioElement[0].load();
+                            }
+                        }
+                    });
+                },
+                cache: false,
+                contentType: false,
+                processData: false
+            });
+        });
+    });
+    
+    </script>
+    <script>
+        // Preload images
+        var img1 = new Image();
+        var img2 = new Image();
+        var img3 = new Image();
+        var img4 = new Image();
+        var img5 = new Image();
+    
+        img1.src = "{{ url_for('static', filename='choosefile.png') }}";
+        img2.src = "{{ url_for('static', filename='choosefilehover.png') }}";
+        img3.src = "{{ url_for('static', filename='choosefilepress.png') }}";
+        img4.src = "{{ url_for('static', filename='uploadhover.png') }}";
+        img5.src = "{{ url_for('static', filename='uploadpress.png') }}";
+    </script>
+{% endblock %}
