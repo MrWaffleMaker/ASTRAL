@@ -2,6 +2,7 @@ import json
 from acrcloud.recognizer import ACRCloudRecognizer
 from acrcloud.recognizer import ACRCloudRecognizeType
 import sys
+import os
 
 def parse_result(result):
     data = json.loads(result)
@@ -16,12 +17,14 @@ def parse_result(result):
 def identify_song(file_path):
     config = {
         'host': 'identify-us-west-2.acrcloud.com',
-        'access_key': '1cc0d5d5a0fc3f27c1857f68475859f0',
-        'access_secret': 'p5bk9W39mUT2n1uQLh1fyW1ZPc7eAWxtG9JpYZJ4',
+        'access_key': os.getenv('ACR_ACCESS_KEY'),
+        'access_secret': os.getenv('ACR_ACCESS_SECRET'),
         'recognize_type': ACRCloudRecognizeType.ACR_OPT_REC_AUDIO, 
         'debug': False,
         'timeout': 10  # seconds
     }
+    print('First few characters of access key:', os.getenv('ACR_ACCESS_KEY')[:4])
+    print('First few characters of access key:', os.getenv('ACR_ACCESS_SECRET')[:4])
 
     recognizer = ACRCloudRecognizer(config)
     buf = open(file_path, 'rb').read()
