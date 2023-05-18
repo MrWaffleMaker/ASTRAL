@@ -62,7 +62,11 @@ def home():
             filename = secure_filename(f"{timestamp}_{file.filename}")
             filepath = app.config['UPLOAD_FOLDER'] / filename
             file.save(filepath)
-
+            if os.path.exists(filepath):
+                print("File exists.")
+                # Proceed with song identification
+            else:
+                print("File does not exist.")
             # Run the appropriate conversion script based on the file extension
             extension = filename.rsplit('.', 1)[1].lower()
             
