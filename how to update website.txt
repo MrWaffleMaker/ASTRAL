@@ -1,8 +1,0 @@
-1. Stage the changes with Git:
-git add .
-
-2. Commit the changes:
-git commit -m "Description of changes"
-
-3. Push the changes to Heroku:
-git push heroku master
