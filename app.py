@@ -62,22 +62,13 @@ def home():
             filename = secure_filename(f"{timestamp}_{file.filename}")
             filepath = app.config['UPLOAD_FOLDER'] / filename
             file.save(filepath)
-            if os.path.exists(filepath):
-                print("File exists.")
-                # Proceed with song identification
-            else:
-                print("File does not exist.")
-            # Run the appropriate conversion script based on the file extension
+
             extension = filename.rsplit('.', 1)[1].lower()
             
             if extension in ['png', 'jpg', 'jpeg']:
                 output_filename = f"{timestamp}_output.mp3"
                 output_filepath = app.config['OUTPUT_FOLDER'] / output_filename
-                if os.path.exists(filepath):
-                    print("File exists. Starting png2audio")
-                    # Proceed with song identification
-                else:
-                    print("File does not exist.")
+
                 png2audio(filepath, output_filepath)
 
                 song_name, artist = identify_song(output_filepath)
@@ -90,11 +81,7 @@ def home():
             elif extension in ['mp3', 'wav']:
                 output_filename = f"{timestamp}_output.png"
                 output_filepath = app.config['OUTPUT_FOLDER'] / output_filename
-                if os.path.exists(filepath):
-                    print("File exists. Starting audio2png")
-                    # Proceed with song identification
-                else:
-                    print("File does not exist.")
+               
                 audio2png(filepath, output_filepath)
                 
                 # Identify the song from the uploaded audio file
@@ -132,7 +119,11 @@ def upload_file():
                 'filename': filename
             })
         elif extension in ['mp3', 'wav']:
-            song_name, artist = identify_song(filepath)
+            try:
+                song_name, artist = identify_song(filepath)
+            except Exception as e:
+                print("Error during song identification:", str(e))
+            #song_name, artist = identify_song(filepath)
             return jsonify({
                 'song_url': url_for('send_file_from_uploads', filename=filename, _external=True),
                 'filename': filename,
