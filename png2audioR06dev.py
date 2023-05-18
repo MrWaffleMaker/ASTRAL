@@ -254,7 +254,8 @@ def save_audio_file(audio_data, output_path, sample_rate):
     sf.write(output_path, audio_data, sample_rate)
 
 def png2audio(input_file,output_path,output_file='output.png',duration=30, sample_rate=44100,frame_size=1024):
-   
+    print(f"Currently working with file at: {input_file}")
+
     output_folder = Path(output_path)
     output_filepath = output_folder #/ output_file
     

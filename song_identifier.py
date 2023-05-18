@@ -23,8 +23,9 @@ def identify_song(file_path):
         'debug': False,
         'timeout': 10  # seconds
     }
-    print('First few characters of access key:', os.getenv('ACR_ACCESS_KEY')[:4])
-    print('First few characters of access key:', os.getenv('ACR_ACCESS_SECRET')[:4])
+    #print('First few characters of access key:', os.getenv('ACR_ACCESS_KEY')[:4])
+    #print('First few characters of access key:', os.getenv('ACR_ACCESS_SECRET')[:4])
+    print(f"Currently working with file at: {file_path}")
 
     recognizer = ACRCloudRecognizer(config)
     buf = open(file_path, 'rb').read()
