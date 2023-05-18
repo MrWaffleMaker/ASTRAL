@@ -6,7 +6,7 @@ import os
 
 def parse_result(result):
     data = json.loads(result)
-
+    print('ACRCloud API status:', data['status']['msg'])
     if data['status']['msg'] != 'Success':
         print('No result found')
         return None
@@ -23,24 +23,25 @@ def identify_song(file_path):
         'debug': False,
         'timeout': 10  # seconds
     }
-    #print('First few characters of access key:', os.getenv('ACR_ACCESS_KEY')[:4])
-    #print('First few characters of access key:', os.getenv('ACR_ACCESS_SECRET')[:4])
+
     print(f"Currently working with file at: {file_path}")
 
     recognizer = ACRCloudRecognizer(config)
     buf = open(file_path, 'rb').read()
+    print('Buffer size:', len(buf))
+    print('Making API call...')
     result = recognizer.recognize_by_filebuffer(buf, 0)
-
-    #print(f"Identify song result: {result}")  # NEW
+    print('API call complete.')
 
     song_info = parse_result(result)
     if song_info is not None:
         title, artist = song_info
         print(f'Title: {title}, Artist: {artist}')
-        return title, artist  # NEW
+        return title, artist
     else:
         print("Could not identify the song.")
-        return None, None  # NEW
+        return None, None
+
 
 def main():
     """if len(sys.argv) != 2:
