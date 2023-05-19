@@ -11,7 +11,7 @@ from scipy import signal, fftpack
 from PIL import Image
 import colorsys
 from pathlib import Path
-from memory_profiler import profile
+#from memory_profiler import profile
 import matplotlib; matplotlib.use('Agg')
 
 """def get_frequency_band(index, sample_rate, frame_size):
