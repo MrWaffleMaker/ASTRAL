@@ -11,6 +11,8 @@ from scipy import signal, fftpack
 from PIL import Image
 import colorsys
 from pathlib import Path
+from memory_profiler import profile
+import matplotlib; matplotlib.use('Agg')
 
 """def get_frequency_band(index, sample_rate, frame_size):
     freq = index * sample_rate / frame_size
@@ -95,11 +97,8 @@ def band_to_numbins(band,sample_rate=44100,frame_size=1024): #based on get_frequ
         print(f"weird band {band}")
         return 0 # "Out of range"
 
+#@profile
 def apply_mdct(audio, frame_size, hop_size, sample_rate):
-    # Determine min and max frequencies in the audio input
-    freqs = np.fft.fftfreq(frame_size, d=1/sample_rate)[:frame_size//2]
-    min_freq, max_freq = freqs.min(), freqs.max()
-    
     num_frames = 1 + (len(audio) - frame_size) // hop_size
     #print(f'len: {len(audio)}, numframes: {num_frames}')
     mdct_frames = np.empty((num_frames, frame_size), dtype=np.float32)
@@ -119,7 +118,7 @@ def apply_mdct(audio, frame_size, hop_size, sample_rate):
 
     return mdct_out
 
-
+#@profile
 def mdct_to_hsv(mdct_array, frame_size, sample_rate, saturation=1):
 
     #print(f"mdct min: {min_value}")
@@ -170,7 +169,7 @@ def calc_req_radius(maxnumcol,dpi=300):
 
     return width_in
 
-
+#@profile
 def plot_polar_spectrogram(hsv_array, output_path,dpi=1000,sample_rate=44100,frame_size=1024):
     output_folder = Path(output_path)
     output_filepath = output_folder #/ output_filename
@@ -184,6 +183,7 @@ def plot_polar_spectrogram(hsv_array, output_path,dpi=1000,sample_rate=44100,fra
 
     # Convert HSV array to RGB
     rgb_array = hsv_to_rgb(hsv_array)
+    del hsv_array
 
     # Initialize the polar plot
     fig, ax = plt.subplots(subplot_kw={"projection": "polar"})
