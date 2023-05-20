@@ -69,15 +69,15 @@ def home():
             filename = secure_filename(f"{timestamp}_{file.filename}")
             filepath = app.config['UPLOAD_FOLDER'] / filename
             file.save(filepath)
-
+            app.logger.info('File uploaded: %s', filename)  # Log the file upload
             extension = filename.rsplit('.', 1)[1].lower()
             
             if extension in ['png', 'jpg', 'jpeg']:
                 output_filename = f"{timestamp}_output.mp3"
                 output_filepath = app.config['OUTPUT_FOLDER'] / output_filename
-
+                app.logger.info('starting png2audio')
                 png2audio(filepath, output_filepath)
-
+                app.logger.info('png2audio complete')
                 song_name, artist = identify_song(output_filepath)
                 return jsonify({
                     'song_url': url_for('send_file', filename=output_filename, _external=True),
@@ -88,9 +88,9 @@ def home():
             elif extension in ['mp3', 'wav']:
                 output_filename = f"{timestamp}_output.png"
                 output_filepath = app.config['OUTPUT_FOLDER'] / output_filename
-               
+                app.logger.info('starting audio2png')
                 audio2png(filepath, output_filepath)
-                
+                app.logger.info('audio2png complete')
                 # Identify the song from the uploaded audio file
                 # song_name, artist = identify_song(filepath)
                 return jsonify({
