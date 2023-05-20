@@ -7,6 +7,7 @@ from song_identifier import identify_song
 from pathlib import Path
 from datetime import datetime
 import time
+import logging  # Import the logging module
 
 
 app_folder = Path(__file__).resolve().parent
@@ -19,6 +20,12 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'mp3', 'wav'}
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['OUTPUT_FOLDER'] = OUTPUT_FOLDER
+
+
+# Set up the logger
+gunicorn_logger = logging.getLogger('gunicorn.error')
+app.logger.handlers = gunicorn_logger.handlers
+app.logger.setLevel(gunicorn_logger.level)
 
 import threading
 
