@@ -26,7 +26,7 @@ app.config['OUTPUT_FOLDER'] = OUTPUT_FOLDER
 gunicorn_logger = logging.getLogger('gunicorn.error')
 app.logger.handlers = gunicorn_logger.handlers
 app.logger.setLevel(gunicorn_logger.level)
-
+logging.basicConfig(level=logging.DEBUG)
 import threading
 
 
@@ -58,6 +58,8 @@ def allowed_file(filename):
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
+    app.logger.info('Info level log')
+    app.logger.warning('Warning level log')
     if request.method == 'POST':
         if 'file' not in request.files:
             return jsonify(error='No file part'), 400
