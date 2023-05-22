@@ -15,10 +15,16 @@ def parse_result(result):
     return song['title'], song['artists'][0]['name']
 
 def identify_song(file_path):
+    access_key = os.getenv('ACR_ACCESS_KEY')
+    access_secret = os.getenv('ACR_ACCESS_SECRET')
+
+    print(f"First 4 digits of Access Key: {access_key[:4]}")
+    print(f"First 4 digits of Access Secret: {access_secret[:4]}")
+
     config = {
         'host': 'identify-us-west-2.acrcloud.com',
-        'access_key': os.getenv('ACR_ACCESS_KEY'),
-        'access_secret': os.getenv('ACR_ACCESS_SECRET'),
+        'access_key': access_key,
+        'access_secret': access_secret,
         'recognize_type': ACRCloudRecognizeType.ACR_OPT_REC_AUDIO, 
         'debug': False,
         'timeout': 10  # seconds
