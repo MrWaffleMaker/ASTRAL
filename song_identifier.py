@@ -17,6 +17,8 @@ def parse_result(result):
 def identify_song(file_path):
     access_key = os.getenv('ACR_ACCESS_KEY')
     access_secret = os.getenv('ACR_ACCESS_SECRET')
+    if access_key is None or access_secret is None:
+        raise Exception("Access key or secret is not set in the environment")
 
     print(f"First 4 digits of Access Key: {access_key[:4]}")
     print(f"First 4 digits of Access Secret: {access_secret[:4]}")
