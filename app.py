@@ -121,13 +121,13 @@ def upload_file():
         filepath = app.config['UPLOAD_FOLDER'] / filename
         file.save(filepath)
         if not os.path.exists(filepath):
-            print(f"File does not exist: {filepath}")
+            app.logger.error(f"File does not exist: {filepath}")
             return
         try:
             with open(filepath, 'rb') as file:
-                print(f"File can be opened: {filepath}")
+                app.logger.info(f"File can be opened: {filepath}")
         except Exception as e:
-            print(f"File cannot be opened: {filepath}. Error: {e}")
+            app.logger.error(f"File cannot be opened: {filepath}. Error: {e}")
         
 
         extension = filename.rsplit('.', 1)[1].lower()
@@ -140,7 +140,7 @@ def upload_file():
             try:
                 song_name, artist = identify_song(filepath)
             except Exception as e:
-                print("Error during song identification:", str(e))
+                app.logger.error("Error during song identification:", str(e))
             #song_name, artist = identify_song(filepath)
             return jsonify({
                 'song_url': url_for('send_file_from_uploads', filename=filename, _external=True),
