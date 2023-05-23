@@ -120,6 +120,15 @@ def upload_file():
         filename = secure_filename(f"{timestamp}_{file.filename}")
         filepath = app.config['UPLOAD_FOLDER'] / filename
         file.save(filepath)
+        if not os.path.exists(filepath):
+            print(f"File does not exist: {filepath}")
+            return
+        try:
+            with open(filepath, 'rb') as file:
+                print(f"File can be opened: {filepath}")
+        except Exception as e:
+            print(f"File cannot be opened: {filepath}. Error: {e}")
+        
 
         extension = filename.rsplit('.', 1)[1].lower()
         if extension in ['png', 'jpg', 'jpeg']:
