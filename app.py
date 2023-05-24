@@ -8,6 +8,7 @@ from pathlib import Path
 from datetime import datetime
 import time
 import logging  # Import the logging module
+import cProfile
 
 
 app_folder = Path(__file__).resolve().parent
@@ -58,6 +59,8 @@ def allowed_file(filename):
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
+    pr = cProfile.Profile()
+    pr.enable()
     app.logger.info('Info level log')
     app.logger.warning('Warning level log')
     if request.method == 'POST':
@@ -100,7 +103,8 @@ def home():
                     #'song_name': song_name,  # Return the identified song name
                     #'artist': artist  # Return the identified artist
                 })
-
+    pr.disable()
+    pr.print_stats(sort='time')
     return render_template('home.html')
 
 
@@ -184,10 +188,6 @@ def process_file():
 def send_file(filename):
     return send_from_directory(app.config['OUTPUT_FOLDER'], filename)
 
-
-
-
-    
     
 if __name__ == "__main__":
     app.run(debug=True)
